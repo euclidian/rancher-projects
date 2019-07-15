@@ -1,0 +1,25 @@
+{
+    "name": "tiketux/rancher-projects",
+    "authors": [
+        {
+            "name": "Muhammad Anis",
+            "email": "m.anis@3trust.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Tiketux\\RancherProjects\\": "src/"
+        }
+    },
+    "require": {},
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Tiketux\\RancherProjects\\RancherProjectsServiceProvider"
+            ]
+        }
+    },
+    "repositories": [
+        
+    ]
+}
