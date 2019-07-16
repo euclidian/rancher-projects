@@ -11,7 +11,9 @@
             "Tiketux\\RancherProjects\\": "src/"
         }
     },
-    "require": {},
+    "require": {
+        "benmag/laravel-rancher": "^1.0"
+    },
     "extra": {
         "laravel": {
             "providers": [
@@ -20,6 +22,9 @@
         }
     },
     "repositories": [
-        
+        {
+            "type": "vcs",
+            "url": "https://github.com/benmag/laravel-rancher.git"
+        }
     ]
 }

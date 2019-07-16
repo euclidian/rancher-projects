@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Laravel\Passport\ClientRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Rancher;
 
 class RancherProjectsApi extends Controller
 {
@@ -17,5 +18,11 @@ class RancherProjectsApi extends Controller
   {
   	$this->middleware(['auth:api']);
   }
+
+  public function listAll()
+  {
+    return response()->json(Rancher::host()->all());
+  }
+
 
 }
