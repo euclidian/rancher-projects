@@ -9,6 +9,7 @@ use Laravel\Passport\ClientRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Rancher;
+use Benmag\Rancher\Factories\Entity\Stack;
 
 class RancherProjectsApi extends Controller
 {
@@ -22,6 +23,11 @@ class RancherProjectsApi extends Controller
   public function listAll()
   {
     return response()->json(Rancher::host()->all());
+  }
+
+  public function listStackAll()
+  {
+    return response()->json(Rancher::stack()->all());
   }
 
 
