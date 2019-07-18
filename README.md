@@ -1,2 +1,2 @@
 # rancher-projects
-https://travis-ci.org/vuetifyjs/vuetify.svg?branch=master
+[![Build Status](https://travis-ci.com/euclidian/rancher-projects.svg?branch=develop)](https://travis-ci.com/euclidian/rancher-projects)
