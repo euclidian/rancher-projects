@@ -38,10 +38,9 @@ jobs:
       - mv !(packages) packages
       - composer create-project --prefer-dist laravel/laravel:5.8 laravel
       - cd laravel
-      - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
       - cp .env.example .env
       - composer config repositories.test path ../packages
-      - composer config repositories.user vcs https://github.com/euclidian/user-management.git
+      - composer config repositories.user vcs git@github.com:euclidian/user-management.git
       - composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts    
       - composer require laravel/passport
       - composer require tiketux/usermanagement
