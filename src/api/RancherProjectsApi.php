@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Laravel\Passport\ClientRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Rancher;
+use Benmag\Rancher\Facades\Rancher;
 use Benmag\Rancher\Factories\Entity\Stack;
 
 class RancherProjectsApi extends Controller
