@@ -41,8 +41,7 @@ jobs:
       - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
       - cp .env.example .env
       - composer config repositories.test path ../packages
-      - composer config repositories.user vcs git@github.com:euclidian/user-management.git
-      - composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts    
+      - composer config repositories.user vcs https://github.com/euclidian/user-management.git  
       - composer require laravel/passport
       - composer require tiketux/usermanagement
       - composer require tiketux/rancher-projects
