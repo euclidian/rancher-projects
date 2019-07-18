@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Rancher;
 use Benmag\Rancher\Factories\Entity\Stack;
+use Tiketux\RancherProjects\Models\RancherProjects;
 
 class RancherProjectsApi extends Controller
 {
@@ -40,6 +41,43 @@ class RancherProjectsApi extends Controller
         }
 
         return response()->json($stacks);
+  }
+
+  public function listStackDB()
+  {
+    $listStackDB = RancherProjects::all();
+
+    $response["statusCode"] = 200;
+    $response["data"] = $listStackDB;
+
+    return response()->json($response);
+  }
+
+  public function cekStackDB(Request $request)
+  {
+    $id_stack     = $request->input('id_stack');
+
+    $listStackDB  = RancherProjects::where('rancher_stack_id', $id_stack)->first();
+
+    $response["statusCode"] = 200;
+    $response["data"] = $listStackDB;
+
+    return response()->json($response);
+  }
+
+  public function addStacktoDB(Request $request)
+  {
+    $id_stack = $request->input('stack_id');
+    $remark   = $request->input('remark');
+
+    $rancherProject = new RancherProjects();
+
+    $addStackDB = $rancherProject->simpan($id_stack, $remark);
+
+    $response["statusCode"] = 200;
+    $response["data"] = $addStackDB;
+
+    return response()->json($response);
   }
 
 

@@ -17,6 +17,9 @@ class RancherProjectsServiceProvider extends ServiceProvider
     $this->publishes([
         __DIR__.'/migrations' => database_path('migrations'),
     ],"Migration_Package_Rancher_Project");
+    $this->publishes([
+        __DIR__.'/components' => resource_path('js/components'),
+    ],"Rancher_Component");
   }
 
   /**
