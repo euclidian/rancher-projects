@@ -1,0 +1,58 @@
+language: php
+dist: trusty
+stages:
+  - test
+  - upgrade_minor
+  - upgrade_major
+
+jobs:
+  include:
+    stage: test
+
+    before_install:
+    - mysql -e 'CREATE DATABASE tiketux_package;'
+
+    env: 
+      MYSQL_DATABASE: tiketux_package
+      MYSQL_ROOT_PASSWORD: secret
+      DB_HOST: "127.0.0.1"
+      DB_DATABASE: tiketux_package
+      DB_USERNAME: root
+      DB_PASSWORD: ""
+      QUEUE_DRIVER: database
+
+    services:
+      - mysql
+
+    addons:
+      apt:
+        sources:
+          - mysql-5.7-trusty
+        packages:
+          - mysql-server
+
+
+    before_script:  
+      - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
+      - shopt -s extglob
+      - mkdir packages
+      - mv !(packages) packages
+      - composer create-project --prefer-dist laravel/laravel:5.8 laravel
+      - cd laravel
+      - cp .env.example .env
+      - composer config repositories.test path ../packages
+      - composer config repositories.user vcs git@github.com:euclidian/user-management.git
+      - composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts    
+      - composer require laravel/passport
+      - composer require tiketux/usermanagement
+      - composer require tiketux/rancher-projects
+      - php artisan vendor:publish --tag=Migration_UserManagement
+      - php artisan vendor:publish --tag=Factory_UserManagement
+      - php artisan vendor:publish --tag=Migration_Package_Rancher_Project
+      - php artisan migrate
+      - php artisan key:generate
+      - php artisan config:cache
+      - php artisan passport:install
+
+    script:
+      - php vendor/bin/phpunit vendor/tiketux/rancher-projects
