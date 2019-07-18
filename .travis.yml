@@ -33,6 +33,7 @@ jobs:
 
 
     before_script:  
+      - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
       - shopt -s extglob
       - mkdir packages
       - mv !(packages) packages
