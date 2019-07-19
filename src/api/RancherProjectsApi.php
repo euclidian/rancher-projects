@@ -38,8 +38,8 @@ class RancherProjectsApi extends Controller
             unset($stack->environment);
             unset($stack->startOnCreate);
             unset($stack->system);
+        
         }
-
         return response()->json($stacks);
   }
 

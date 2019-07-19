@@ -18,7 +18,7 @@
               <v-layout wrap>
                 <v-flex xs12>
                   <v-textarea
-                    v-model="remark"
+                    model="remark"
                     name="input-7-1"
                     label="Remark"
                     value="Add Remark"
@@ -69,7 +69,8 @@
           <td>{{ props.item.description }}</td>
           <td>{{ props.item.accountId }}</td>
           <td>{{ props.item.state }}</td>
-          <td v-on="detail(props.item.id)">{{id_test}}
+          <td v-on="detail(props.item.id)">
+            {{ a }}{{ b }}
           </td>
         </template>
       </v-data-table>
@@ -84,8 +85,8 @@ export default {
     this.instance = axios.create({
       baseURL: '/tiketux/rancherprojects/api/'
     });
-    this.list();
     this.listStackDB();
+    this.list();
   },
   data() {
     return {
@@ -115,63 +116,53 @@ export default {
         .then(response => {
           that.rancherprojects = response.data;
           console.log(response.data);
-          
         })
         .catch(error => {
           console.log(response.data);                        
-        }); 
+        });              
+    },
+    listStackDB: function(){
+    var that = this; 
       that.instance
         .get('liststackdb')
         .then(response => {
           that.stackdb = response.data.data;
-          console.log(response.data.data);
+          console.log(response.data);
         })
         .catch(error => {
           console.log(response.data);                        
-        });             
-    },
-    listStackDB: function(){
-    var that = this; 
-      
+        });
     },
     toDB: function(params){
     var that = this; 
-      that.id_rancher = params;
       that.dialog=true;
     },
-    save: function(){
-    var that = this;
-    that.instance
-      .post('addstackdb',{
-        "stack_id" : that.id_rancher,
-        "remark" : that.remark
-      })
-        .then(response => {
-          that.list();
-          console.log(response);
-        })
-        .catch(error => {
-          console.log(response.data);                        
-        }); 
-    },
     detail: function(params){
+    
       var that = this;
       that.instance
       .post('cekstackdb',{
         "id_stack" : params
       })
-        .then(response => {
-          that.data1 = response.data.data;
-          if(that.data1.lenght == 0){
-          that.id_test=that.data1;
+      .then(response => {
+        that.a = response.data.data;
+          if(response.data.data === null){
+            that.b = "sama";
+            console.log("beda");
+          }else if(response.data.data !== null){
+            that.b = "beda";
+            console.log("sama");
           }else{
-          that.id_test=that.data1;
+            that.b = "kosong";
+            console.log(that.id_test1);
           }
-          //console.log(response.data.data);
+          console.log(params);
         })
         .catch(error => {
           console.log(response.data);                        
         }); 
+
+        that.a = params;
     }
   }
 };
