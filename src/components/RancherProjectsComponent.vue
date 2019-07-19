@@ -21,7 +21,6 @@
                     model="remark"
                     name="input-7-1"
                     label="Remark"
-                    value="Add Remark"
                     hint="Hint text"
                   ></v-textarea>
                 </v-flex>
@@ -37,7 +36,6 @@
             color="primary"
             flat
             @click="save"
-            v-if="remark!=null"
             >Simpan</v-btn>
             <v-btn
               color="primary"
@@ -69,8 +67,15 @@
           <td>{{ props.item.description }}</td>
           <td>{{ props.item.accountId }}</td>
           <td>{{ props.item.state }}</td>
-          <td v-on="detail(props.item.id)">
-            {{ a }}{{ b }}
+          <td>
+            <v-tooltip top>
+                <template v-slot:activator="{ on }">
+                <v-btn v-if="props.item.status == null" fab dark small color="primary"  @click="toDB(props.item.id)" v-on="on">
+                  <v-icon dark>save_alt</v-icon>
+                </v-btn>
+              </template>
+              <span>Add To Database</span>
+              </v-tooltip>
           </td>
         </template>
       </v-data-table>
@@ -85,7 +90,6 @@ export default {
     this.instance = axios.create({
       baseURL: '/tiketux/rancherprojects/api/'
     });
-    this.listStackDB();
     this.list();
   },
   data() {
@@ -115,54 +119,49 @@ export default {
         .get('liststack')
         .then(response => {
           that.rancherprojects = response.data;
+          that.rancherprojects.forEach(function(item, index) {
+            that.$set(that.rancherprojects[index], "status", null);
+            that.detail(index, item);
+          });
+
           console.log(response.data);
         })
         .catch(error => {
           console.log(response.data);                        
         });              
     },
-    listStackDB: function(){
-    var that = this; 
-      that.instance
-        .get('liststackdb')
-        .then(response => {
-          that.stackdb = response.data.data;
-          console.log(response.data);
-        })
-        .catch(error => {
-          console.log(response.data);                        
-        });
-    },
     toDB: function(params){
     var that = this; 
       that.dialog=true;
     },
-    detail: function(params){
-    
+    detail: function(index, item){
       var that = this;
       that.instance
       .post('cekstackdb',{
-        "id_stack" : params
+        "id_stack" : item.id
       })
       .then(response => {
-        that.a = response.data.data;
-          if(response.data.data === null){
-            that.b = "sama";
-            console.log("beda");
-          }else if(response.data.data !== null){
-            that.b = "beda";
-            console.log("sama");
-          }else{
-            that.b = "kosong";
-            console.log(that.id_test1);
-          }
-          console.log(params);
+        that.rancherprojects[index].status = response.data.data;
+        console.log(response.data);
         })
         .catch(error => {
           console.log(response.data);                        
         }); 
-
-        that.a = params;
+    },
+    save: function(){
+    var that = this;
+    that.instance
+      .post('addstackdb',{
+        "stack_id" : that.id_rancher,
+        "remark" : that.remark
+      })
+        .then(response => {
+          that.list();
+          console.log(response);
+        })
+        .catch(error => {
+          console.log(response.data);                        
+        }); 
     }
   }
 };
