@@ -20,9 +20,6 @@ class RancherProjectsServiceProvider extends ServiceProvider
     $this->publishes([
         __DIR__.'/components' => resource_path('js/components'),
     ],"Rancher_Component");
-    $this->publishes([
-        __DIR__.'/migrations/2019_07_18_034501_add_timestamps.php' => database_path('migrations'),
-    ],"Migration_Add_Timestamps");
   }
 
   /**
