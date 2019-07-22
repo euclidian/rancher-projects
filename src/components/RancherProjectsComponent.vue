@@ -18,7 +18,7 @@
               <v-layout wrap>
                 <v-flex xs12>
                   <v-textarea
-                    model="remark"
+                    v-model="remark"
                     name="input-7-1"
                     label="Remark"
                     hint="Hint text"
@@ -123,7 +123,6 @@ export default {
             that.$set(that.rancherprojects[index], "status", null);
             that.detail(index, item);
           });
-
           console.log(response.data);
         })
         .catch(error => {
@@ -131,8 +130,9 @@ export default {
         });              
     },
     toDB: function(params){
-    var that = this; 
+    var that = this;
       that.dialog=true;
+      that.id_rancher = params;
     },
     detail: function(index, item){
       var that = this;
@@ -156,8 +156,9 @@ export default {
         "remark" : that.remark
       })
         .then(response => {
-          that.list();
           console.log(response);
+          that.dialog = false;
+          that.list();
         })
         .catch(error => {
           console.log(response.data);                        
