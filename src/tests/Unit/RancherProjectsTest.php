@@ -109,6 +109,11 @@ class RancherProjectsTest extends PassportTestCase
           "remark"            => $remark
         ]
       ]);
+
+    $this->assertDatabaseHas('rancher_stacks', [
+      "rancher_stack_id"  => $id_stack,
+      "remark"            => $remark
+    ]);
   }
 
   public function testListStackDB()
