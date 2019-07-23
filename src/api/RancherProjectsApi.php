@@ -80,5 +80,18 @@ class RancherProjectsApi extends Controller
     return response()->json($response);
   }
 
+  public function deleteStackinDB(Request $request)
+  {
+    $id_stack = $request->input('stack_id');
+
+    $rancherProject = RancherProjects::where("rancher_stack_id", $id_stack);
+    $rancherProject->delete();
+
+    $response["statusCode"] = 200;
+    $response["data"] = $rancherProject;
+    return response()->json($response);
+
+  }
+
 
 }
