@@ -22,6 +22,7 @@ class PassportTestCase extends TestCase
     protected $scopes = [];
     protected $IdRole;
     protected $user;
+    protected $stack;
     public function setUp(): void
     {
         parent::setUp();
@@ -41,6 +42,10 @@ class PassportTestCase extends TestCase
         ]);
         $this->user = factory(UserManagement::class)->create([
             "is_admin" => 1
+        ]);
+        $this->stack = factory(RancherProjects::class)->create([
+            "rancher_stack_id"  => "test",
+            "remark"            => "test"
         ]);
         $token = $this->user->createToken('TestToken', $this->scopes)->accessToken;
         $this->headers['Accept'] = 'application/json';

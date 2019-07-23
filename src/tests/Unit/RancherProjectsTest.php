@@ -95,7 +95,7 @@ class RancherProjectsTest extends PassportTestCase
   public function testAddStacktoDB()
   {
     $id_stack = "12345";
-    $remark   = $this->faker->text;
+    $remark   = "abcd";
 
     $response = $this->post("/tiketux/rancherprojects/api/addstackdb",[
                 "stack_id"  => $id_stack,
@@ -114,22 +114,32 @@ class RancherProjectsTest extends PassportTestCase
   public function testListStackDB()
   {
     $response = $this->get("/tiketux/rancherprojects/api/liststackdb");
+
     $response->assertStatus(200)
       ->assertJson([
-        "statusCode" => 200
+        "statusCode"  => 200,
+        "data"        =>[[
+          "rancher_stack_id"  => $this->stack->rancher_stack_id,
+          "remark"            => $this->stack->remark
+        ]]
       ]);
   }
 
   public function testCekStackDB()
   {
-    $id_stack = "12345";
+    $id_stack = $this->stack->rancher_stack_id;
 
     $response = $this->post("/tiketux/rancherprojects/api/cekstackdb", [
                 "id_stack"  => $id_stack
               ]);
+
     $response->assertStatus(200)
       ->assertJson([
-        "statusCode" => 200
+        "statusCode" => 200,
+          "data"        =>[
+          "rancher_stack_id"  => $this->stack->rancher_stack_id,
+          "remark"            => $this->stack->remark
+        ]
       ]);
   }
 }
