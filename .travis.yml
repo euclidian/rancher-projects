@@ -46,6 +46,7 @@ jobs:
       - php artisan vendor:publish --tag=Migration_UserManagement
       - php artisan vendor:publish --tag=Factory_UserManagement
       - php artisan vendor:publish --tag=Migration_Package_Rancher_Project
+      - php artisan vendor:publish --tag=Migration_Factory_Rancher_Project
       - php artisan migrate
       - php artisan key:generate
       - php artisan config:cache
