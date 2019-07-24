@@ -42,7 +42,7 @@ class RancherStackProjectsTest extends PassportTestCase
       ]]);
     });
 
-    $response = $this->get("/tiketux/rancherprojects/api/liststack");
+    $response = $this->get("/tiketux/rancher/stack/api/liststack");
     $response->assertStatus(200)
       ->assertJson([[
         "id"          => $id,
@@ -59,7 +59,7 @@ class RancherStackProjectsTest extends PassportTestCase
     $id_stack = "12345";
     $remark   = "abcd";
 
-    $response = $this->post("/tiketux/rancherprojects/api/addstackdb",[
+    $response = $this->post("/tiketux/rancher/stack/api/addstackdb",[
                 "stack_id"  => $id_stack,
                 "remark"    => $remark
               ]);
@@ -80,7 +80,7 @@ class RancherStackProjectsTest extends PassportTestCase
 
   public function testListStackDB()
   {
-    $response = $this->get("/tiketux/rancherprojects/api/liststackdb");
+    $response = $this->get("/tiketux/rancher/stack/api/liststackdb");
 
     $response->assertStatus(200)
       ->assertJson([
@@ -96,7 +96,7 @@ class RancherStackProjectsTest extends PassportTestCase
   {
     $id_stack = $this->stack->rancher_stack_id;
 
-    $response = $this->post("/tiketux/rancherprojects/api/cekstackdb", [
+    $response = $this->post("/tiketux/rancher/stack/api/cekstackdb", [
                 "id_stack"  => $id_stack
               ]);
 

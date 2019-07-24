@@ -78,7 +78,7 @@ export default {
   name: "StackRancherComponent",
   mounted() {
     this.instance = axios.create({
-      baseURL: '/tiketux/rancherprojects/api/'
+      baseURL: '/tiketux/rancher/stack/api/'
     });
     this.list();
   },
