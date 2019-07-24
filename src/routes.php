@@ -6,3 +6,6 @@ Route::get('/tiketux/rancher/stack/api/liststackdb', 'Tiketux\RancherProjects\Ap
 Route::post('/tiketux/rancher/stack/api/addstackdb', 'Tiketux\RancherProjects\Api\RancherStackApi@addStacktoDB');
 Route::post('/tiketux/rancher/stack/api/cekstackdb', 'Tiketux\RancherProjects\Api\RancherStackApi@cekStackDB');
 Route::post('/tiketux/rancher/stack/api/deletestackdb', 'Tiketux\RancherProjects\Api\RancherStackApi@deleteStackinDB');
+Route::post('/tiketux/rancher/stack/api/listserviceonstack', 'Tiketux\RancherProjects\Api\RancherStackApi@listServiceOnStack');
+Route::post('/tiketux/rancher/stack/api/addservicetodb', 'Tiketux\RancherProjects\Api\RancherStackApi@addServicetoDB');
+Route::post('/tiketux/rancher/stack/api/cekserviceindb', 'Tiketux\RancherProjects\Api\RancherStackApi@cekServiceOnDB');
