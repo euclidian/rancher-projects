@@ -13,7 +13,11 @@ class RancherProjects extends Model
 
     public static function simpan($id_stack, $remark)
     {
-    	$rancherProject = new RancherProjects();
+    	$rancherProject = RancherProjects::where('rancher_stack_id', $id_stack)->first();
+
+        if ($rancherProject == null){
+            $rancherProject = new RancherProjects;
+        }
 
     	$rancherProject->rancher_stack_id	= $id_stack;
     	$rancherProject->remark 			= $remark;
