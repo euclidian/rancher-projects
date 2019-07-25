@@ -9,7 +9,7 @@ use Tiketux\RancherProjects\Models\RancherProjects;
 $factory->define(RancherProjects::class, function (Faker $faker) {
     return [
         //
-        'rancher_stack_id' 	=> str_random(5),
+        'rancher_stack_id' 	=> $faker->name,
         'remark' 			=> $faker->text,
     ];
 });
