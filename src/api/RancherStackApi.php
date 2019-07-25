@@ -25,7 +25,16 @@ class RancherStackApi extends Controller
   {
     $stacks = Rancher::stack()->all();
 
+        foreach ($stacks as $stack)
+        {
+            unset($stack->dockerCompose);
+            unset($stack->rancherCompose);
+            unset($stack->healthState);
+            unset($stack->environment);
+            unset($stack->startOnCreate);
+            unset($stack->system);
         
+        }
         return response()->json($stacks);
   }
 
