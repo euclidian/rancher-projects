@@ -277,8 +277,20 @@ export default {
     },
     detailStack: function(params){
       var that = this;
-      that.dialogDetail=true;
-      that.listService(params);
+      that.instance
+      .post('cekstackdb',{
+        "id_stack" : params
+      })
+      .then(response => {
+        that.idStackDB = response.data.data.id;
+        that.idStack   = response.data.data.rancher_stack_id;
+        that.listService(that.idStack);
+        that.dialogDetail=true;
+        console.log(response.data.data);
+        })
+        .catch(error => {
+          console.log(response.data);                        
+        }); 
     },
     listService: function(params){
       var that = this;
@@ -316,7 +328,7 @@ export default {
       var that = this;
       that.dialogAddService=true;
       that.idService = id;
-      that.stackIdService = stack_id;
+      that.stackIdService = that.idStackDB;
     },
     saveService: function(id, stack_id){
       var that = this;
@@ -329,7 +341,7 @@ export default {
         })
           .then(response => {
             that.dialogAddService =false;
-            that.listService(that.stackIdService);
+            that.listService(that.idStack);
             console.log(response);
           })
           .catch(error => {

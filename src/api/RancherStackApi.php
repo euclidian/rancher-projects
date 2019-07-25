@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Benmag\Rancher\Facades\Rancher;
 use Benmag\Rancher\Factories\Entity\Stack;
-use Tiketux\RancherProjects\Models\RancherProjects;
+use Tiketux\RancherProjects\Models\Stacks;
+use Tiketux\RancherProjects\Models\StackServices;
 
 class RancherStackApi extends Controller
 {
@@ -40,7 +41,7 @@ class RancherStackApi extends Controller
 
   public function listStackDB()
   {
-    $listStackDB = RancherProjects::all();
+    $listStackDB = Stacks::all();
 
     $response["statusCode"] = 200;
     $response["data"] = $listStackDB;
@@ -52,7 +53,7 @@ class RancherStackApi extends Controller
   {
     $id_stack     = $request->input('id_stack');
 
-    $listStackDB  = RancherProjects::where('rancher_stack_id', $id_stack)->first();
+    $listStackDB  = Stacks::where('rancher_stack_id', $id_stack)->first();
 
     $response["statusCode"] = 200;
     $response["data"] = $listStackDB;
@@ -65,7 +66,7 @@ class RancherStackApi extends Controller
     $id_stack = $request->input('stack_id');
     $remark   = $request->input('remark');
 
-    $rancherProject = new RancherProjects();
+    $rancherProject = new Stacks();
 
     $addStackDB = $rancherProject->simpan($id_stack, $remark);
 
@@ -79,7 +80,7 @@ class RancherStackApi extends Controller
   {
     $id_stack = $request->input('stack_id');
 
-    $rancherProject = RancherProjects::where("rancher_stack_id", $id_stack);
+    $rancherProject = Stacks::where("rancher_stack_id", $id_stack);
     $rancherProject->delete();
 
     $response["statusCode"] = 200;
@@ -108,10 +109,8 @@ class RancherStackApi extends Controller
     $stack_id             = $request->input('stack_id');
 
     //cek id stack in db
-    $rancherProject = RancherProjects::where('rancher_stack_id', $stack_id)->first();
-    $stack_id = $rancherProject->id;
-
-    $rancherProject = new RancherProjects();
+    $rancherProject = Stacks::findOrFail($stack_id);
+    $rancherProject = new StackServices();
     $addServiceDB = $rancherProject->simpanRancher($gitlab_url, $rancher_project_id, $remark, $stack_id);
 
     $response["statusCode"] = 200;
@@ -124,7 +123,7 @@ class RancherStackApi extends Controller
   {
     $rancher_project_id   = $request->input('project_id');
 
-    $rancherProject = new RancherProjects();
+    $rancherProject = new StackServices();
     $cekServiceDB = $rancherProject->cekRancher($rancher_project_id);
 
     $response["statusCode"] = 200;
