@@ -150,7 +150,7 @@
       <v-data-table
         :rows-per-page-items="rowsPerPageItems"
         :pagination.sync="pagination"
-        :headers="headerService"
+        :headers="header"
         :items="rancherprojects"
         class="elevation-1"
       >
