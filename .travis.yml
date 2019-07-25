@@ -42,7 +42,7 @@ jobs:
       - composer config repositories.test path ../packages
       - composer require laravel/passport
       - composer require tiketux/usermanagement
-      - composer require tiketux/rancher-projects
+      - composer require tiketux/rancher-projects:dev-list_service
       - php artisan vendor:publish --tag=Migration_UserManagement
       - php artisan vendor:publish --tag=Factory_UserManagement
       - php artisan vendor:publish --tag=Migration_Package_Rancher_Project
