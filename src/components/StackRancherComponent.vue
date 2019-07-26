@@ -1,6 +1,34 @@
 <template>
   <v-app>
-    <v-card v-if="editStack">
+    <v-card v-if="dialogService">
+        <v-btn
+        color="white"
+        class="mb-0 black--text"
+        fab
+        small
+        @click="dialogService =false"
+      >
+        <v-icon dark>close</v-icon>
+      </v-btn>
+        <v-card-title>
+          <span class="headline">List Service Stack</span>
+        </v-card-title>
+        <v-data-table
+          :rows-per-page-items="rowsPerPageItems"
+          :pagination.sync="pagination"
+          :headers="headerDetail"
+          :items="detailServiceStackonDB"
+          class="elevation-1"
+        >
+          <template v-slot:items="props">
+            <td>{{ props.item.rancher_project_id }}</td>
+            <td>{{ props.item.gitlab_url }}</td>
+            <td>{{ props.item.remark }}</td>
+            <td>{{ props.item.created_at }}</td>
+          </template>
+        </v-data-table>
+      </v-card>
+    <v-card v-if="editStack == true && dialogService == false">
         <v-card-title>
           <span class="headline">Edit Stack</span>
         </v-card-title>
@@ -11,7 +39,6 @@
                   <v-text-field
                     v-model="rancherStackId"
                     :counter="10"
-                    :rules="nameRules"
                     label="Name"
                     required
                     readonly
@@ -32,7 +59,7 @@
           <v-btn color="primary" flat @click="save">Simpan</v-btn>
         </v-card-actions>
       </v-card>
-    <v-card v-else>
+    <v-card v-else-if="editStack == false && dialogService == false">
       <v-card-title primary-title>
         <div>
           <h3 class="headline mb-0">Daftar Stack</h3>
@@ -47,9 +74,18 @@
       >
         <template v-slot:items="props">
           <td>{{ props.item.rancher_stack_id }}</td>
+          <td>{{ props.item.name }}</td>
           <td>{{ props.item.remark }}</td>
           <td>{{ props.item.created_at }}</td>
           <td>
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-btn fab dark small color="success"  @click="detailServiceStack(props.item.id)" v-on="on">
+                  <v-icon dark>more_horiz</v-icon>
+                </v-btn>
+              </template>
+              <span>Detail Stack</span>
+            </v-tooltip>
             <v-tooltip top>
               <template v-slot:activator="{ on }">
                 <v-btn fab dark small color="warning"  @click="formEditStack(props.item.rancher_stack_id)" v-on="on">
@@ -84,14 +120,26 @@ export default {
   },
   data() {
     return {
+      rowsPerPageItems: [25, 50, 75, 100],
+      pagination: {
+        rowsPerPage: 25
+      },
       editStack:false,
       stacks:[],
       header:[
-        { text: "ID Rancher ", value: "rancher_stack_id" },
+        { text: "ID Stack ", value: "rancher_stack_id" },
+        { text: "Name", value: "name" },
         { text: "Remark", value: "remark" },
         { text: "Tanggal", value: "created_at" },
         { text: "Action", value: "id" }
-      ]
+      ],
+      headerDetail:[
+        { text: "ID Rancher ", value: "rancher_project_id" },
+        { text: "Gitlab URL", value: "gitlab_url" },
+        { text: "Remark", value: "remark" },
+        { text: "Tanggal", value: "created_at" }
+      ],
+      dialogService:false
     };
   },
 
@@ -102,6 +150,10 @@ export default {
         .get('liststackdb')
         .then(response => {
           that.stacks = response.data.data;
+          that.stacks.forEach(function(item, index) {
+            that.$set(that.stacks[index], "name", null);
+            that.detail(index, item);
+          });
           console.log(response.data);
         })
         .catch(error => {
@@ -155,6 +207,35 @@ export default {
         .catch(error => {
           console.log(response.data);                        
         }); 
+    },
+    detail: function(index, item){
+      var that = this;
+      that.instance
+      .post('detailstack',{
+        "stack_id" : item.rancher_stack_id
+      })
+      .then(response => {
+        that.stacks[index].name = response.data.data.name;
+        console.log(response.data.data);
+      })
+      .catch(error => {
+        console.log(response.data);                        
+      }); 
+    },
+    detailServiceStack: function(params){
+      var that = this;
+      that.instance
+      .post('detailservicestackdb',{
+        "stack_id" : params
+      })
+      .then(response => {
+        that.detailServiceStackonDB = response.data.data;
+        that.dialogService = true;
+        console.log(response.data.data);
+      })
+      .catch(error => {
+        console.log(response.data);                        
+      });
     }
   }
   

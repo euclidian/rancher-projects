@@ -39,6 +39,25 @@ class RancherStackApi extends Controller
         return response()->json($stacks);
   }
 
+  public function detailStackOnline(Request $request)
+  {
+    $stack_id = $request->input('stack_id');
+
+    $stacks = Rancher::stack()->get($stack_id);
+
+    unset($stacks->dockerCompose);
+    unset($stacks->rancherCompose);
+    unset($stacks->healthState);
+    unset($stacks->environment);
+    unset($stacks->startOnCreate);
+    unset($stacks->system);
+
+    $response["statusCode"] = 200;
+    $response["data"] = $stacks;
+
+    return response()->json($response);
+  }
+
   public function listStackDB()
   {
     $listStackDB = Stacks::all();
@@ -132,5 +151,16 @@ class RancherStackApi extends Controller
     return response()->json($response);
   }
 
+  public function detailServiceStackOnDB(Request $request)
+  {
+    $stack_id   = $request->input('stack_id');
 
+    $rancherProject = new StackServices();
+    $detailServiceStackDB = StackServices::where('stack_id', $stack_id)->get();
+
+    $response["statusCode"] = 200;
+    $response["data"] = $detailServiceStackDB;
+
+    return response()->json($response);
+  }
 }
