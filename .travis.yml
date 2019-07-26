@@ -42,10 +42,13 @@ jobs:
       - composer config repositories.test path ../packages
       - composer require laravel/passport
       - composer require tiketux/usermanagement
+      - composer require benmag/laravel-rancher
+      - composer config repositories.packagist false
       - composer require tiketux/rancher-projects
       - php artisan vendor:publish --tag=Migration_UserManagement
       - php artisan vendor:publish --tag=Factory_UserManagement
       - php artisan vendor:publish --tag=Migration_Package_Rancher_Project
+      - php artisan vendor:publish --tag=Migration_Factory_Rancher_Project
       - php artisan migrate
       - php artisan key:generate
       - php artisan config:cache

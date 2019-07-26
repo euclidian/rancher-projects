@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Benmag\Rancher\Facades\Rancher;
 use Benmag\Rancher\Factories\Entity\Stack;
-use Tiketux\RancherProjects\Models\RancherProjects;
+use Tiketux\RancherProjects\Models\Stacks;
 
 class RancherProjectsApi extends Controller
 {

@@ -4,19 +4,19 @@ namespace Tiketux\RancherProjects\Models;
 
 use Illuminate\Database\Eloquent\Model;
 // use Spatie\Activitylog\Traits\LogsActivity;
-// use DB;
+use DB;
 
-class RancherProjects extends Model
+class Stacks extends Model
 {
 	protected $table = "rancher_stacks";
     protected $fillable = ["id", "rancher_stack_id", "remark"];
 
     public static function simpan($id_stack, $remark)
     {
-    	$rancherProject = RancherProjects::where('rancher_stack_id', $id_stack)->first();
+    	$rancherProject = Stacks::where('rancher_stack_id', $id_stack)->first();
 
         if ($rancherProject == null){
-            $rancherProject = new RancherProjects;
+            $rancherProject = new Stacks;
         }
 
     	$rancherProject->rancher_stack_id	= $id_stack;

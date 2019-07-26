@@ -11,7 +11,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 use DB;
 use DateTime;
-use Tiketux\RancherProjects\Models\RancherProjects;
+use Tiketux\RancherProjects\Models\Stacks;
 use Laravel\Passport\Passport;
 use Tiketux\UserManagement\Models\UserManagement;
 
@@ -43,10 +43,7 @@ class PassportTestCase extends TestCase
         $this->user = factory(UserManagement::class)->create([
             "is_admin" => 1
         ]);
-        $this->stack = factory(RancherProjects::class)->create([
-            "rancher_stack_id"  => "test",
-            "remark"            => "test"
-        ]);
+        $this->stack = factory(Stacks::class)->create();
         $token = $this->user->createToken('TestToken', $this->scopes)->accessToken;
         $this->headers['Accept'] = 'application/json';
         $this->headers['Authorization'] = 'Bearer ' . $token;
