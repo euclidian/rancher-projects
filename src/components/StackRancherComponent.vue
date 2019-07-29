@@ -29,7 +29,6 @@
                   :counter="10"
                   label="Name"
                   required
-                  readonly
                 ></v-text-field>
                 <v-textarea
                   v-model="remarkService"
@@ -291,6 +290,7 @@ export default {
     },
     detailServiceStack: function(params){
       var that = this;
+      that.detailIdService = params;
       that.instance
       .post('detailservicestackdb',{
         "stack_id" : params
@@ -330,7 +330,9 @@ export default {
           "id" : params
         })
         .then(response => {
-          that.detailServiceStack(that.stackIdService);
+          that.dialogFormService =false;
+          that.dialogService =false;
+          that.detailServiceStack(that.detailIdService);
         })
         .catch(error => {
           console.log(response.data);                        
@@ -348,8 +350,8 @@ export default {
         })
         .then(response => {
           that.dialogFormService =false;
+          that.dialogService =false;
           that.detailServiceStack(that.stackIdService);
-          that.dialogService = true;
         })
         .catch(error => {
           console.log(response.data);                        
