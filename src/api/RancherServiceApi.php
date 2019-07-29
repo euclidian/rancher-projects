@@ -12,10 +12,11 @@ use Benmag\Rancher\Facades\Rancher;
 use Benmag\Rancher\Factories\Entity\Stack;
 use Tiketux\RancherProjects\Models\Stacks;
 use Tiketux\RancherProjects\Models\StackServices;
+use Tiketux\RancherProjects\Models\ServiceEnv;
 
 class RancherServiceApi extends Controller
 {
-  
+
 
   public function __construct()
   {
@@ -30,19 +31,19 @@ class RancherServiceApi extends Controller
       'base_uri' => config('rancher.baseUrl'),
       'auth' => [config('rancher.accessKey'), config('rancher.secretKey')],
     ]);
-    $response = $client->get('stack/'.$id_stack.'/services');
+    $response = $client->get('stack/' . $id_stack . '/services');
     $service = json_decode($response->getBody()->getContents());
     $dataService = $service->data;
-    
-      foreach ($dataService as $dataServiceStack) {
-        $data[] = [
-          'id'    => $dataServiceStack->id,
-          'name'  => $dataServiceStack->name,
-          'state' => $dataServiceStack->state
-        ];
-      }
-      $responseData["statusCode"] = 200;
-      $responseData["data"] = $data;
+
+    foreach ($dataService as $dataServiceStack) {
+      $data[] = [
+        'id'    => $dataServiceStack->id,
+        'name'  => $dataServiceStack->name,
+        'state' => $dataServiceStack->state
+      ];
+    }
+    $responseData["statusCode"] = 200;
+    $responseData["data"] = $data;
 
     return response()->json($responseData);
   }
@@ -130,6 +131,29 @@ class RancherServiceApi extends Controller
 
     $response["statusCode"] = 200;
     $response["data"] = $rancherProject;
+
+    return response()->json($response);
+  }
+
+  public function detailServiceOnline(Request $request)
+  {
+    $id   = $request->input('id');
+    $ss = StackServices::findOrFail($id);
+
+    if (!ServiceEnv::where("project_id", $ss->id)->first()) {
+      $rancherProject = Rancher::Service()->get($ss->rancher_project_id);
+      foreach ((array) $rancherProject->launchConfig->environment as $key => $value) {
+        ServiceEnv::create([
+          "project_id" => $ss->id,
+          "project_online_id" => $ss->rancher_project_id,
+          "key" => $key,
+          "value" => $value
+        ]);
+      }
+    }
+    $result = ServiceEnv::where("project_id", $ss->id)->get();
+    $response["statusCode"] = 200;
+    $response["data"] = $result;
 
     return response()->json($response);
   }
