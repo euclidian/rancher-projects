@@ -31,54 +31,20 @@ class RancherServiceApi extends Controller
       'auth' => [config('rancher.accessKey'), config('rancher.secretKey')],
     ]);
     $response = $client->get('stack/'.$id_stack.'/services');
-    $test = json_decode($response->getBody()->getContents());
-    $test1 = $test->data;
+    $service = json_decode($response->getBody()->getContents());
+    $dataService = $service->data;
     
-      foreach ($test1 as $testt) {
-        unset($testt->type);
-        unset($testt->links);
-        unset($testt->actions);
-        unset($testt->baseType);
-        unset($testt->accountId);
-        unset($testt->assignServiceIpAddress);
-        unset($testt->createIndex);
-        unset($testt->created);
-        unset($testt->createdTS);
-        unset($testt->currentScale);
-        unset($testt->data);
-        unset($testt->description);
-        unset($testt->externalId);
-        unset($testt->fqdn);
-        unset($testt->healthState);
-        unset($testt->instanceIds);
-        unset($testt->kind);
-        unset($testt->launchConfig);
-        unset($testt->lbConfig);
-        unset($testt->linkedServices);
-        unset($testt->metadata);
-        unset($testt->publicEndpoints);
-        unset($testt->removeTime);
-        unset($testt->removed);
-        unset($testt->retainIp);
-        unset($testt->scale);
-        unset($testt->scalePolicy);
-        unset($testt->secondaryLaunchConfigs);
-        unset($testt->selectorContainer);
-        unset($testt->selectorLink);
-        unset($testt->startOnCreate);
-        unset($testt->system);
-        unset($testt->transitioning);
-        unset($testt->transitioningMessage);
-        unset($testt->transitioningProgress);
-        unset($testt->upgrade);
-        unset($testt->stackId);
-        unset($testt->uuid);
-        unset($testt->vip);
+      foreach ($dataService as $dataServiceStack) {
+        $data[] = [
+          'id'    => $dataServiceStack->id,
+          'name'  => $dataServiceStack->name,
+          'state' => $dataServiceStack->state
+        ];
       }
-      $test2["statusCode"] = 200;
-      $test2["data"] = $test1;
+      $responseData["statusCode"] = 200;
+      $responseData["data"] = $data;
 
-    return response()->json($test2);
+    return response()->json($responseData);
   }
 
   public function addServicetoDB(Request $request)
