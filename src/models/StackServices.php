@@ -30,4 +30,17 @@ class StackServices extends Model
 
         return $rancherProject;
     }
+
+    public static function editRancher($gitlab_url, $rancher_project_id, $remark, $stack_id, $id)
+    {
+        $rancherProject = StackServices::findOrFail($id);
+        $rancherProject->update([
+            'gitlab_url'         => $gitlab_url,
+            'rancher_project_id' => $rancher_project_id,
+            'remark'             => $remark,
+            'stack_id'           => $stack_id
+        ]);
+
+        return $rancherProject;
+    }
 }

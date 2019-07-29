@@ -1,6 +1,52 @@
 <template>
   <v-app>
-    <v-card v-if="dialogService">
+    <v-card v-if="dialogFormService">
+        <v-btn
+        color="white"
+        class="mb-0 black--text"
+        fab
+        small
+        @click="dialogFormService=false"
+      >
+        <v-icon dark>close</v-icon>
+      </v-btn>
+        <v-card-title>
+          <span class="headline">Edit Service Stack</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container grid-list-md>
+            <v-layout wrap>
+              <v-flex xs12>
+                <v-text-field
+                  v-model="rancherProjectId"
+                  :counter="10"
+                  label="Name"
+                  required
+                  readonly
+                ></v-text-field>
+                <v-text-field
+                  v-model="gitURL"
+                  :counter="10"
+                  label="Name"
+                  required
+                ></v-text-field>
+                <v-textarea
+                  v-model="remarkService"
+                  name="input-7-1"
+                  label="Remark"
+                  hint="Hint text"
+                ></v-textarea>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="error" flat @click="dialogFormService = false">Batal</v-btn>
+          <v-btn color="primary" flat @click="editService">Simpan</v-btn>
+        </v-card-actions>
+      </v-card>
+    <v-card v-if="dialogService == true && dialogFormService == false">
         <v-btn
         color="white"
         class="mb-0 black--text"
@@ -25,10 +71,28 @@
             <td>{{ props.item.gitlab_url }}</td>
             <td>{{ props.item.remark }}</td>
             <td>{{ props.item.created_at }}</td>
+            <td>
+              <v-tooltip top>
+                <template v-slot:activator="{ on }">
+                  <v-btn fab dark small color="warning"  @click="formEditService(props.item.id)" v-on="on">
+                    <v-icon dark>edit</v-icon>
+                  </v-btn>
+                </template>
+                <span>Edit Stack in Database</span>
+              </v-tooltip>
+              <v-tooltip top>
+                <template v-slot:activator="{ on }">
+                  <v-btn fab dark small color="error"  @click="deleteService(props.item.id)" v-on="on">
+                    <v-icon dark>delete</v-icon>
+                  </v-btn>
+                </template>
+                <span>Delete Stack in Database</span>
+              </v-tooltip>
+            </td>
           </template>
         </v-data-table>
       </v-card>
-    <v-card v-if="editStack == true && dialogService == false">
+    <v-card v-if="editStack == true && dialogService == false && dialogFormService == false">
         <v-card-title>
           <span class="headline">Edit Stack</span>
         </v-card-title>
@@ -59,7 +123,7 @@
           <v-btn color="primary" flat @click="save">Simpan</v-btn>
         </v-card-actions>
       </v-card>
-    <v-card v-else-if="editStack == false && dialogService == false">
+    <v-card v-else-if="editStack == false && dialogService == false && dialogFormService == false">
       <v-card-title primary-title>
         <div>
           <h3 class="headline mb-0">Daftar Stack</h3>
@@ -137,9 +201,11 @@ export default {
         { text: "ID Rancher ", value: "rancher_project_id" },
         { text: "Gitlab URL", value: "gitlab_url" },
         { text: "Remark", value: "remark" },
-        { text: "Tanggal", value: "created_at" }
+        { text: "Tanggal", value: "created_at" },
+        { text: "Action", value: "rancher_project_id" }
       ],
-      dialogService:false
+      dialogService:false,
+      dialogFormService:false
     };
   },
 
@@ -224,6 +290,7 @@ export default {
     },
     detailServiceStack: function(params){
       var that = this;
+      that.detailIdService = params;
       that.instance
       .post('detailservicestackdb',{
         "stack_id" : params
@@ -236,6 +303,59 @@ export default {
       .catch(error => {
         console.log(response.data);                        
       });
+    },
+    formEditService :function(params){
+      var that = this;
+      that.instance
+        .post('detailservice',{
+          "id" : params
+        })
+        .then(response => {
+          that.dialogFormService = true;
+          that.idService = response.data.data.id;
+          that.gitURL = response.data.data.gitlab_url;
+          that.rancherProjectId = response.data.data.rancher_project_id;
+          that.remarkService = response.data.data.remark;
+          that.stackIdService = response.data.data.stack_id;
+          console.log(response);
+        })
+        .catch(error => {
+          console.log(response.data);                        
+        });
+    },
+    deleteService : function(params){
+      var that = this;
+      that.instance
+        .post('deleteservicestackdb',{
+          "id" : params
+        })
+        .then(response => {
+          that.dialogFormService =false;
+          that.dialogService =false;
+          that.detailServiceStack(that.detailIdService);
+        })
+        .catch(error => {
+          console.log(response.data);                        
+        });
+    },
+    editService: function(){
+      var that = this;
+      that.instance
+        .post('updateservicetodb',{
+          "id" : that.idService,
+          "url" : that.gitURL,
+          "project_id" : that.rancherProjectId,
+          "remark" : that.remarkService,
+          "stack_id" : that.stackIdService
+        })
+        .then(response => {
+          that.dialogFormService =false;
+          that.dialogService =false;
+          that.detailServiceStack(that.stackIdService);
+        })
+        .catch(error => {
+          console.log(response.data);                        
+        });
     }
   }
   
