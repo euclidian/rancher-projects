@@ -17,3 +17,8 @@ Route::post('/tiketux/rancher/stack/api/detailservicestack', 'Tiketux\RancherPro
 Route::post('/tiketux/rancher/stack/api/deleteservicestackdb', 'Tiketux\RancherProjects\Api\RancherServiceApi@deleteServiceStackOnDB');
 Route::post('/tiketux/rancher/stack/api/updateservicetodb', 'Tiketux\RancherProjects\Api\RancherServiceApi@updateServicetoDB');
 Route::post('/tiketux/rancher/stack/api/detailservice', 'Tiketux\RancherProjects\Api\RancherServiceApi@detailServiceOnDB');
+
+Route::get('/tiketux/rancherprojects/api/template/list', 'Tiketux\RancherProjects\Api\RancherTemplateApi@listAll');
+Route::get('/tiketux/rancherprojects/api/template/detail/{id}', 'Tiketux\RancherProjects\Api\RancherTemplateApi@detailTemplate');
+Route::post('/tiketux/rancherprojects/api/template/save', 'Tiketux\RancherProjects\Api\RancherTemplateApi@saveTemplate');
+Route::get('/tiketux/rancherprojects/api/template/delete/{id}', 'Tiketux\RancherProjects\Api\RancherTemplateApi@deleteTemplate');
