@@ -22,3 +22,9 @@ Route::get('/tiketux/rancherprojects/api/template/list', 'Tiketux\RancherProject
 Route::get('/tiketux/rancherprojects/api/template/detail/{id}', 'Tiketux\RancherProjects\Api\RancherTemplateApi@detailTemplate');
 Route::post('/tiketux/rancherprojects/api/template/save', 'Tiketux\RancherProjects\Api\RancherTemplateApi@saveTemplate');
 Route::get('/tiketux/rancherprojects/api/template/delete/{id}', 'Tiketux\RancherProjects\Api\RancherTemplateApi@deleteTemplate');
+
+Route::get('/tiketux/rancherprojects/api/config/list', 'Tiketux\RancherProjects\Api\RancherConfigApi@listAll');
+Route::get('/tiketux/rancherprojects/api/config/detail/{id}', 'Tiketux\RancherProjects\Api\RancherConfigApi@detailConfig');
+Route::get('/tiketux/rancherprojects/api/config/detail_template/{id}', 'Tiketux\RancherProjects\Api\RancherConfigApi@detailTemplate');
+Route::post('/tiketux/rancherprojects/api/config/save', 'Tiketux\RancherProjects\Api\RancherConfigApi@saveConfig');
+Route::get('/tiketux/rancherprojects/api/config/delete/{id}', 'Tiketux\RancherProjects\Api\RancherConfigApi@deleteConfig');
