@@ -3,32 +3,44 @@
     <v-btn @click="addedit = true" fixed dark fab bottom right color="blue">
       <v-icon>add</v-icon>
     </v-btn>
-    <v-dialog v-model="addedit" persistent max-width="800px">
+    <v-dialog v-model="addedit" fullscreen hide-overlay transition="dialog-bottom-transition">
       <v-card>
-        <v-card-title>
-          <span class="headline">Stack Template</span>
-        </v-card-title>
-
+        <v-toolbar dark color="primary">
+          <v-btn icon dark @click="closeAddTemplate">
+            <v-icon>close</v-icon>
+          </v-btn>
+          <v-toolbar-title>Stack Template</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-toolbar-items>
+            <v-btn dark flat @click="save">Save</v-btn>
+          </v-toolbar-items>
+        </v-toolbar>
         <v-card-text>
           <v-container grid-list-md>
             <v-layout wrap>
-              <v-flex xs12>
+              <v-flex xs4>
                 <v-text-field
                   v-model="name"
                   :error-messages="errortxt!=null?errortxt.name:''"
-                  label="Dessert name"
+                  label="Template Name"
                 ></v-text-field>
               </v-flex>
-              <v-flex xs12>
+            </v-layout>
+            <v-layout wrap>
+              <v-flex xs6>
                 <v-textarea
                   v-model="docker_compose"
+                  auto-grow
+                  outline
                   :error-messages="errortxt!=null?errortxt.docker_compose_yml:''"
                   label="Docker Compose Config"
                 ></v-textarea>
               </v-flex>
-              <v-flex xs12>
+              <v-flex xs6>
                 <v-textarea
                   v-model="rancher_compose"
+                  auto-grow
+                  outline
                   :error-messages="errortxt!=null?errortxt.rancher_compose_yml:''"
                   label="Rancher Compose Config"
                 ></v-textarea>
@@ -36,12 +48,6 @@
             </v-layout>
           </v-container>
         </v-card-text>
-
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="error" flat @click="closeAddTemplate">Cancel</v-btn>
-          <v-btn color="blue darken-1" flat @click="save">Save</v-btn>
-        </v-card-actions>
       </v-card>
     </v-dialog>
     <v-toolbar flat color="white">
@@ -95,6 +101,7 @@ export default {
       this.docker_compose = null;
       this.rancher_compose = null;
       this.template_id = null;
+      this.errortxt = null;
     },
     save() {
       var that = this;
@@ -108,6 +115,7 @@ export default {
         })
         .then(response => {
           console.log(response.data.data);
+          that.errortxt = null;
           that.closeAddTemplate();
           that.loading = false;
           that.list();

@@ -36,7 +36,9 @@ class StackConfig extends Model
 
         return [
             "docker" => $textUntukDitimpa1,
-            "rancher" => $textUntukDitimpa2
+            "rancher" => $textUntukDitimpa2,
+            "docker_compose_yml" => $st->docker_compose_yml,
+            "rancher_compose_yml" => $st->rancher_compose_yml
         ];
     }
 
