@@ -23,14 +23,35 @@ class StackConfig extends Model
         while ($result = strpos($st->docker_compose_yml, "{%", $indexSebelumnya)) {
             $awal = $result + 2;
             $akhir = strpos($st->docker_compose_yml, "%}", $indexSebelumnya);
-            $textUntukDitimpa1[] = ["key" => substr($st->docker_compose_yml, $awal, $akhir - $awal)];
+            $ada = false;
+            $terlup = 0;
+            foreach ($textUntukDitimpa1 as $item) {
+                $terlup++;
+                if (substr($st->docker_compose_yml, $awal, $akhir - $awal) == $item["key"]) {
+                    $ada = true;
+                    break;
+                }
+            }
+            if (!$ada) {
+                $textUntukDitimpa1[] = ["key" => substr($st->docker_compose_yml, $awal, $akhir - $awal)];
+            }
             $indexSebelumnya = $akhir + 2;
         }
+
         $indexSebelumnya = 0;
         while ($result = strpos($st->rancher_compose_yml, "{%", $indexSebelumnya)) {
             $awal = $result + 2;
             $akhir = strpos($st->rancher_compose_yml, "%}", $indexSebelumnya);
-            $textUntukDitimpa2[] = ["key" => substr($st->rancher_compose_yml, $awal, $akhir - $awal)];
+            $ada = false;
+            foreach ($textUntukDitimpa2 as $item) {
+                if (substr($st->docker_compose_yml, $awal, $akhir - $awal) == $item["key"]) {
+                    $ada = true;
+                    break;
+                }
+            }
+            if (!$ada) {
+                $textUntukDitimpa2[] = ["key" => substr($st->rancher_compose_yml, $awal, $akhir - $awal)];
+            }
             $indexSebelumnya = $akhir + 2;
         }
 
