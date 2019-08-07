@@ -33,6 +33,8 @@ class RancherConfigApi extends Controller
       "template_id" => "required|integer",
       "name" => "required|string",
       "configs.rancher.*.key" => "required|string",
+      "configs.docker.*.key" => "required|string",
+      "configs.rancher.*.value" => "required|string",
       "configs.docker.*.value" => "required|string"
     ]);
     $sc = StackConfig::saveConfig(
