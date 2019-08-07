@@ -16,48 +16,46 @@ class StackConfig extends Model
     {
         $st = StackTemplate::findOrFail($id);
 
-        $indexSebelumnya = 0;
-        $textUntukDitimpa1 = [];
-        $textUntukDitimpa2 = [];
+        $indexBefore = 0;
+        $forReplacedText1 = [];
+        $forReplacedText2 = [];
 
-        while ($result = strpos($st->docker_compose_yml, "{%", $indexSebelumnya)) {
+        while ($result = strpos($st->docker_compose_yml, "{%", $indexBefore)) {
             $awal = $result + 2;
-            $akhir = strpos($st->docker_compose_yml, "%}", $indexSebelumnya);
-            $ada = false;
-            $terlup = 0;
-            foreach ($textUntukDitimpa1 as $item) {
-                $terlup++;
+            $akhir = strpos($st->docker_compose_yml, "%}", $indexBefore);
+            $exist = false;
+            foreach ($forReplacedText1 as $item) {
                 if (substr($st->docker_compose_yml, $awal, $akhir - $awal) == $item["key"]) {
-                    $ada = true;
+                    $exist = true;
                     break;
                 }
             }
-            if (!$ada) {
-                $textUntukDitimpa1[] = ["key" => substr($st->docker_compose_yml, $awal, $akhir - $awal)];
+            if (!$exist) {
+                $forReplacedText1[] = ["key" => substr($st->docker_compose_yml, $awal, $akhir - $awal)];
             }
-            $indexSebelumnya = $akhir + 2;
+            $indexBefore = $akhir + 2;
         }
 
-        $indexSebelumnya = 0;
-        while ($result = strpos($st->rancher_compose_yml, "{%", $indexSebelumnya)) {
+        $indexBefore = 0;
+        while ($result = strpos($st->rancher_compose_yml, "{%", $indexBefore)) {
             $awal = $result + 2;
-            $akhir = strpos($st->rancher_compose_yml, "%}", $indexSebelumnya);
-            $ada = false;
-            foreach ($textUntukDitimpa2 as $item) {
+            $akhir = strpos($st->rancher_compose_yml, "%}", $indexBefore);
+            $exist = false;
+            foreach ($forReplacedText2 as $item) {
                 if (substr($st->docker_compose_yml, $awal, $akhir - $awal) == $item["key"]) {
-                    $ada = true;
+                    $exist = true;
                     break;
                 }
             }
-            if (!$ada) {
-                $textUntukDitimpa2[] = ["key" => substr($st->rancher_compose_yml, $awal, $akhir - $awal)];
+            if (!$exist) {
+                $forReplacedText2[] = ["key" => substr($st->rancher_compose_yml, $awal, $akhir - $awal)];
             }
-            $indexSebelumnya = $akhir + 2;
+            $indexBefore = $akhir + 2;
         }
 
         return [
-            "docker" => $textUntukDitimpa1,
-            "rancher" => $textUntukDitimpa2,
+            "docker" => $forReplacedText1,
+            "rancher" => $forReplacedText2,
             "docker_compose_yml" => $st->docker_compose_yml,
             "rancher_compose_yml" => $st->rancher_compose_yml
         ];
