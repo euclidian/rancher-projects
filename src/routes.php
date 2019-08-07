@@ -3,6 +3,8 @@
 Route::get('/tiketux/rancherprojects/api/list', 'Tiketux\RancherProjects\Api\RancherProjectsApi@listAll');
 
 Route::get('/tiketux/rancher/stack/api/liststack', 'Tiketux\RancherProjects\Api\RancherStackApi@listStackAll');
+Route::post('/tiketux/rancher/stack/api/addstack', 'Tiketux\RancherProjects\Api\RancherStackApi@createStack');
+
 Route::post('/tiketux/rancher/stack/api/detailstack', 'Tiketux\RancherProjects\Api\RancherStackApi@detailStackOnline');
 Route::get('/tiketux/rancher/stack/api/liststackdb', 'Tiketux\RancherProjects\Api\RancherStackApi@listStackDB');
 Route::post('/tiketux/rancher/stack/api/addstackdb', 'Tiketux\RancherProjects\Api\RancherStackApi@addStacktoDB');
