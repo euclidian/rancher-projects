@@ -117,15 +117,25 @@ class RancherServiceApi extends Controller
 
   public function updateServicetoDB(Request $request)
   {
+    $request->validate([
+      'id' => "required",
+      'url' => "required",
+      'project_id' => "required",
+      'remark' => "required",
+      'stack_id' => "required",
+      'name' => "required"
+    ]);
+
     $id                   = $request->input('id');
     $gitlab_url           = $request->input('url');
     $rancher_project_id   = $request->input('project_id');
     $remark               = $request->input('remark');
+    $name               = $request->input('name');
     $stack_id             = $request->input('stack_id');
 
     $rancherProject = Stacks::findOrFail($stack_id);
     $rancherProject = new StackServices();
-    $addServiceDB = $rancherProject->editRancher($gitlab_url, $rancher_project_id, $remark, $stack_id, $id);
+    $addServiceDB = $rancherProject->editRancher($gitlab_url, $rancher_project_id, $remark, $name, $stack_id, $id);
 
     $response["statusCode"] = 200;
     $response["data"] = $addServiceDB;
