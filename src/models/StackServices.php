@@ -9,7 +9,7 @@ use DB;
 class StackServices extends Model
 {
     protected $table = "rancher_projects";
-    protected $fillable = ["gitlab_url", "rancher_project_id", "remark", "stack_id"];
+    protected $guarded = ["id"];
 
     public static function simpanRancher($gitlab_url, $rancher_project_id, $remark, $stack_id, $name)
     {
@@ -32,13 +32,14 @@ class StackServices extends Model
         return $rancherProject;
     }
 
-    public static function editRancher($gitlab_url, $rancher_project_id, $remark, $stack_id, $id)
+    public static function editRancher($gitlab_url, $rancher_project_id, $remark, $name, $stack_id, $id)
     {
         $rancherProject = StackServices::findOrFail($id);
         $rancherProject->update([
             'gitlab_url'         => $gitlab_url,
             'rancher_project_id' => $rancher_project_id,
             'remark'             => $remark,
+            'name'               => $name,
             'stack_id'           => $stack_id
         ]);
 
