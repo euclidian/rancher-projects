@@ -36,7 +36,6 @@ class ServiceAssignmentApi extends Controller
   {
     $r->validate([
       "project_id" => "required|integer",
-      "users" => "required|array",
       "users.*.id" => "required|integer"
     ]);
     
