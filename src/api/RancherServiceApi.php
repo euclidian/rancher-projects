@@ -20,7 +20,7 @@ class RancherServiceApi extends Controller
 
   public function __construct()
   {
-    $this->middleware(['auth:api']);
+    $this->middleware(['auth:api', "admin"]);
   }
 
   public function listServiceOnStack(Request $request)
@@ -50,15 +50,25 @@ class RancherServiceApi extends Controller
 
   public function addServicetoDB(Request $request)
   {
+    $request->validate([
+      'url' => "required",
+      'project_id' => "required",
+      'remark' => "required",
+      'stack_id' => "required",
+      'name' => "required"
+    ]);
+
+
     $gitlab_url           = $request->input('url');
     $rancher_project_id   = $request->input('project_id');
     $remark               = $request->input('remark');
     $stack_id             = $request->input('stack_id');
+    $name                 = $request->input('name');
 
     //cek id stack in db
     $rancherProject = Stacks::findOrFail($stack_id);
     $rancherProject = new StackServices();
-    $addServiceDB = $rancherProject->simpanRancher($gitlab_url, $rancher_project_id, $remark, $stack_id);
+    $addServiceDB = $rancherProject->simpanRancher($gitlab_url, $rancher_project_id, $remark, $stack_id, $name);
 
     $response["statusCode"] = 200;
     $response["data"] = $addServiceDB;

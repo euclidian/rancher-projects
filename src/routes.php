@@ -30,3 +30,8 @@ Route::get('/tiketux/rancherprojects/api/config/detail/{id}', 'Tiketux\RancherPr
 Route::get('/tiketux/rancherprojects/api/config/detail_template/{id}', 'Tiketux\RancherProjects\Api\RancherConfigApi@detailTemplate');
 Route::post('/tiketux/rancherprojects/api/config/save', 'Tiketux\RancherProjects\Api\RancherConfigApi@saveConfig');
 Route::get('/tiketux/rancherprojects/api/config/delete/{id}', 'Tiketux\RancherProjects\Api\RancherConfigApi@deleteConfig');
+
+
+Route::get('/tiketux/rancherprojects/api/assignment/list_services', 'Tiketux\RancherProjects\Api\ServiceAssignmentApi@listServices');
+Route::post('/tiketux/rancherprojects/api/assignment/list', 'Tiketux\RancherProjects\Api\ServiceAssignmentApi@listAll');
+Route::post('/tiketux/rancherprojects/api/assignment/save', 'Tiketux\RancherProjects\Api\ServiceAssignmentApi@saveAssignment');
