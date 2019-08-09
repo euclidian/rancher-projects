@@ -8,19 +8,20 @@ use DB;
 
 class StackServices extends Model
 {
-	protected $table = "rancher_projects";
+    protected $table = "rancher_projects";
     protected $fillable = ["gitlab_url", "rancher_project_id", "remark", "stack_id"];
 
-    public static function simpanRancher($gitlab_url, $rancher_project_id, $remark, $stack_id)
+    public static function simpanRancher($gitlab_url, $rancher_project_id, $remark, $stack_id, $name)
     {
-        
+
         $rancherProject = new StackServices();
         $rancherProject->gitlab_url         = $gitlab_url;
         $rancherProject->rancher_project_id = $rancher_project_id;
         $rancherProject->remark             = $remark;
         $rancherProject->stack_id           = $stack_id;
+        $rancherProject->name               = $name;
         $rancherProject->save();
-        
+
         return $rancherProject;
     }
 

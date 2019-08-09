@@ -15,7 +15,7 @@ class RancherConfigApi extends Controller
 
   public function __construct()
   {
-    $this->middleware(['auth:api', IsAdmin::class]);
+    $this->middleware(['auth:api', "admin"]);
   }
 
   public function listAll()
