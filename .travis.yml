@@ -40,7 +40,7 @@ jobs:
       - cd laravel
       - cp .env.example .env
       - composer config repositories.test path ../packages
-      - composer require laravel/passport
+      - composer require laravel/passport:7.0
       - composer require tiketux/usermanagement
       - composer require benmag/laravel-rancher
       - composer config repositories.packagist false
