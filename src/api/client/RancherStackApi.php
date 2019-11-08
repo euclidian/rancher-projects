@@ -44,4 +44,45 @@ class RancherStackApi extends Controller
     $response["data"] = $data;
     return response()->json($response);
   }
+
+  public function detailStackOnline(Request $request)
+  {
+    $request->validate([
+      "stack_id" => "required|string"
+    ]);
+    $stack_id = $request->input('stack_id');
+
+    $stacks = Rancher::stack()->get($stack_id);
+    $client = new \GuzzleHttp\Client([
+      'base_uri' => config('rancher.baseUrl'),
+      'auth' => [config('rancher.accessKey'), config('rancher.secretKey')],
+    ]);
+
+    $response = $client->get('stack/' . $stack_id . '/services');
+    $service = json_decode($response->getBody()->getContents());
+
+    unset($stacks->dockerCompose);
+    unset($stacks->rancherCompose);
+    unset($stacks->environment);
+    unset($stacks->startOnCreate);
+    unset($stacks->system);
+    $stacks->services = [];
+
+    foreach ($service->data as $item) {
+      foreach ($item->instanceIds as $ids) {
+        if (Rancher::container()->get($ids)->state == "running") {
+          $instanceIds = $ids;
+          break;
+        }
+      }
+      array_push($stacks->services, [
+        "id" => $item->id,
+        "name" => $item->name,
+        "healthState" => $item->healthState,
+        "containerId" => $instanceIds
+      ]);
+    }
+
+    return response()->json($stacks);
+  }
 }

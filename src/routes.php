@@ -37,4 +37,6 @@ Route::post('/tiketux/rancherprojects/api/assignment/list', 'Tiketux\RancherProj
 Route::post('/tiketux/rancherprojects/api/assignment/save', 'Tiketux\RancherProjects\Api\ServiceAssignmentApi@saveAssignment');
 
 Route::post('/tiketux/rancher/stack/client/addstack', 'Tiketux\RancherProjects\Api\Client\RancherStackApi@createStack');
+Route::post('/tiketux/rancher/stack/client/detailstack', 'Tiketux\RancherProjects\Api\Client\RancherStackApi@detailStackOnline');
 Route::post('/tiketux/rancherprojects/client/config/save', 'Tiketux\RancherProjects\Api\Client\RancherConfigApi@saveConfig');
+Route::post('/tiketux/rancher/service/client/execute', 'Tiketux\RancherProjects\Api\Client\RancherServiceApi@executeCommandStack');
