@@ -31,24 +31,25 @@ class RancherServiceApi extends Controller
     ]);
     $container_id = $request->input('container_id');
     $ce = new ContainerExec();
-
+    $ce->command = [];
+    $ce->command[] = "/bin/sh";
+    $ce->command[] = "-c";
+    $command = "";
     foreach ($request->commands as $item) {
-      $ce->command = [];
-      $splittedCommand = explode(" ", $item);
-      foreach ($splittedCommand as $innerCommand) {
-        $ce->command[] = $innerCommand;
-      }
-      $result = Rancher::container()->execute($container_id, $ce);
-
-      \Ratchet\Client\connect($result->url . "?token=" . $result->token)->then(function ($conn) {
-
-        $conn->on('message', function ($msg) use ($conn) {
-          $conn->close();
-        });
-      }, function ($e) {
-        echo "Could not connect: {$e->getMessage()}\n";
-      });
+      $command .= $item . ";";
     }
+    $ce->command[] = $command;
+    $result = Rancher::container()->execute($container_id, $ce);
+
+    \Ratchet\Client\connect($result->url . "?token=" . $result->token)->then(function ($conn) {
+
+      $conn->on('message', function ($msg) use ($conn) {
+        $conn->close();
+      });
+    }, function ($e) {
+      echo "Could not connect: {$e->getMessage()}\n";
+    });
+    
     $ce->command = $request->input("commands");
     $response["statusCode"] = 200;
     $response["data"] = $ce;
